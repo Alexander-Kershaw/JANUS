@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: janus
+Version: 0.1.0
+Summary: JANUS: Event-to-Insight SaaS Analytics Platform
+Requires-Python: >=3.11
+Requires-Dist: python-dateutil>=2.9
+Requires-Dist: pydantic>=2.6
+Requires-Dist: pandas>=2.2
+Requires-Dist: pyarrow>=15.0
+Requires-Dist: orjson>=3.9
+Requires-Dist: sqlalchemy>=2.0
+Requires-Dist: psycopg2-binary>=2.9
+Requires-Dist: dbt-core>=1.7
+Requires-Dist: dbt-postgres>=1.7
+Requires-Dist: great-expectations>=0.18
+Requires-Dist: scikit-learn>=1.4
+Requires-Dist: shap>=0.44
+Requires-Dist: streamlit>=1.32

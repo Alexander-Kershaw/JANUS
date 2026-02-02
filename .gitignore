@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.DS_Store
+.ipynb_checkpoints/
+data/bronze/
+data/silver/
+data/gold/
+data/snapshots/*
+!data/snapshots/.gitkeep
