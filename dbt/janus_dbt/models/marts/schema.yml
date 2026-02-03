@@ -77,3 +77,19 @@ models:
           - not_null
           - accepted_values:
               values: [0, 1]
+
+
+  - name: gold_user_features_daily
+    description: "Model-ready daily user feature table joined to churn labels."
+    columns:
+      - name: date_day
+        tests: [not_null]
+      - name: user_id
+        tests: [not_null]
+      - name: churn_7d
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+      - name: late_rate_7d
+        description: "Late events / total events in last 7 days."
