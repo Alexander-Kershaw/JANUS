@@ -21,3 +21,24 @@ models:
         description: "Count of events where received_ts > event_ts."
         tests:
           - not_null
+
+
+  - name: fct_billing_daily
+    description: "Daily billing start metrics by plan derived from stg_billing."
+    columns:
+      - name: date_day
+        description: "Billing date (day grain)."
+        tests:
+          - not_null
+      - name: plan_id
+        description: "Plan identifier (e.g., pro)."
+        tests:
+          - not_null
+      - name: starts
+        description: "Count of billing start events on the day for the plan."
+        tests:
+          - not_null
+      - name: new_paid_users
+        description: "Distinct users with a start event on the day for the plan."
+        tests:
+          - not_null
