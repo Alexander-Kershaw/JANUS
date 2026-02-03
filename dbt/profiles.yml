@@ -1,0 +1,13 @@
+janus:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: localhost
+      port: 5433
+      user: janus
+      password: janus_password
+      dbname: airflow
+      schema: dbt
+      threads: 4
+      keepalives_idle: 0
