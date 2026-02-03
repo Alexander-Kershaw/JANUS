@@ -11,4 +11,4 @@ select
   lateness_sec,
   source_file,
   ingestion_ts
-from silver.silver_events
+from {{source('silver', 'silver_events')}}
