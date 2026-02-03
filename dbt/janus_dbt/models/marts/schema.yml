@@ -42,3 +42,22 @@ models:
         description: "Distinct users with a start event on the day for the plan."
         tests:
           - not_null
+
+
+  - name: fct_subscriptions_daily
+    description: "Daily subscription state per user derived from billing events (start/upgrade/cancel)."
+    columns:
+      - name: date_day
+        description: "Day grain of subscription state."
+        tests:
+          - not_null
+      - name: user_id
+        description: "User identifier."
+        tests:
+          - not_null
+      - name: is_active
+        description: "Whether the user has an active subscription on the day."
+        tests:
+          - not_null
+      - name: plan_id
+        description: "Active plan_id on the day (null if inactive)."
