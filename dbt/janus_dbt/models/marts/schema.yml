@@ -61,3 +61,19 @@ models:
           - not_null
       - name: plan_id
         description: "Active plan_id on the day (null if inactive)."
+
+    
+
+  - name: gold_churn_labels_daily
+    description: "Daily churn labels: churn_7d=1 if active today and inactive for the next 7 days."
+    columns:
+      - name: date_day
+        tests: [not_null]
+      - name: user_id
+        tests: [not_null]
+      - name: churn_7d
+        description: "Binary churn label (0/1)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
