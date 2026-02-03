@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: fct_events_daily
+    description: "Daily event and engagement metrics derived from stg_events."
+    columns:
+      - name: date_day
+        description: "UTC day derived from event_ts."
+        tests:
+          - not_null
+          - unique
+      - name: events
+        description: "Total number of events on the day."
+        tests:
+          - not_null
+      - name: dau
+        description: "Daily active users (distinct non-null user_id)."
+        tests:
+          - not_null
+      - name: late_events
+        description: "Count of events where received_ts > event_ts."
+        tests:
+          - not_null
