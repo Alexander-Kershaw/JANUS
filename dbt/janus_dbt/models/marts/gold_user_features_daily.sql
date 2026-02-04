@@ -89,7 +89,11 @@ select
   a.date_day,
   a.user_id,
   s.is_active,
-  s.plan_id,
+  case
+    when s.plan_id is null then 'free'
+    when s.plan_id = 'unknown' then 'free'
+  else s.plan_id
+  end as plan_id,
   a.events_7d,
   a.sessions_7d,
   a.feature_use_7d,
