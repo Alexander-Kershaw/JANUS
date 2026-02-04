@@ -1,11 +1,40 @@
+# OS junk
+.DS_Store
+
+# Python
 __pycache__/
 *.pyc
-.venv/
+*.pyo
+*.egg-info/
+.eggs/
+
+# Virtual envs
 .env
-.DS_Store
+.venv
+.envrc
+
+# Raw generated data
+data/raw/events/*.jsonl
+data/raw/billing/*.csv
+
+# Snapshots and screenshots
+data/snapshots/*.png
+data/snapshots/*.jpg
+
+# dbt artifacts
+dbt/**/target/
+dbt/**/logs/
+dbt/**/partial_parse.msgpack
+dbt/**/manifest.json
+dbt/**/run_results.json
+dbt/**/graph.gpickle
+dbt/**/graph_summary.json
+dbt/**/semantic_manifest.json
+
+# Logs and reports
+logs/
+reports/
+
+# Notebooks
 .ipynb_checkpoints/
-data/bronze/
-data/silver/
-data/gold/
-data/snapshots/*
-!data/snapshots/.gitkeep
+

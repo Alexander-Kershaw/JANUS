@@ -1,4 +1,9 @@
-with days as (
+with
+max_date as (
+    select max(event_ts::date) as max_date
+    from {{ ref('stg_events') }}
+),
+days as (
     select distinct date_day
     from {{ ref('fct_subscriptions_daily') }}
 ),
@@ -31,7 +36,7 @@ agg as (
 
       count(distinct e.session_id) filter (
         where e.event_day > d.date_day - 7
-          and e.event_day <= d.date_da 
+          and e.event_day <= d.date_day 
       ) as sessions_7d,
 
       count(*) filter (
@@ -80,7 +85,6 @@ labels as (
     select date_day, user_id, churn_7d
     from {{ ref('gold_churn_labels_daily') }}
 )
-
 select
   a.date_day,
   a.user_id,
@@ -99,3 +103,4 @@ left join subs s
 left join labels l
   on l.date_day = a.date_day
  and l.user_id = a.user_id
+where a.date_day <= (select max(date_day) from {{ ref('fct_subscriptions_daily') }}) - interval '7 days'

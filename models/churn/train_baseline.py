@@ -18,7 +18,7 @@ REPORTS_DIR = Path("reports/model_cards")
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Predictive features from gold churn labels table
-FEATURES = [
+FEATURE_COLS = [
     "events_7d",
     "sessions_7d",
     "feature_use_7d",
@@ -49,29 +49,37 @@ def load_data() -> pd.DataFrame:
     return pd.read_sql(text(sql), eng)
 
 
-def temporal_split(df: pd.DataFrame, test_days: int = 7):
-
-    # Trains on all but last N days, test on last N days, creating test train split.
-
-    cutoff = df["date_day"].max() - pd.Timedelta(days=test_days)
-    train = df[df["date_day"] <= cutoff]
-    test = df[df["date_day"] > cutoff]
-    return train, test
-
 
 def main() -> None:
     df = load_data()
 
-    df = df.copy()
-    df["plan_id"] = df["plan_id"].fillna("unknown")
-    df = pd.get_dummies(df, columns=["plan_id"], drop_first=True)
-    train, test = temporal_split(df, test_days=7)
+    # time split: last day is test, earlier days are train 
+    df["date_day"] = pd.to_datetime(df["date_day"]).dt.date
+    df = df.sort_values(["date_day", "user_id"]).reset_index(drop=True)
 
-    feature_cols = FEATURES + [c for c in train.columns if c.startswith("plan_id_")]
-    X_train = train[feature_cols]
-    y_train = train[TARGET]
-    X_test = test[feature_cols]
-    y_test = test[TARGET]
+    unique_days = sorted(df["date_day"].unique())
+    if len(unique_days) < 2:
+        raise ValueError(f"Need at least 2 days to split, got {len(unique_days)}")
+
+    test_day = unique_days[-1]
+    train_mask = df["date_day"] < test_day
+    test_mask = df["date_day"] == test_day
+
+    X = df[FEATURE_COLS].copy()
+    y = df["churn_7d"].astype(int).copy()
+
+    X_train, y_train = X.loc[train_mask], y.loc[train_mask]
+    X_test, y_test = X.loc[test_mask], y.loc[test_mask]
+
+    print("SPLIT_CHECK:")
+    print("  train_days:", unique_days[:-1])
+    print("  test_day:", test_day)
+    print("  X_train:", X_train.shape, "y_train:", y_train.shape, "pos_train:", int(y_train.sum()))
+    print("  X_test :", X_test.shape,  "y_test :", y_test.shape,  "pos_test :", int(y_test.sum()))
+
+    if X_train.shape[0] == 0 or X_test.shape[0] == 0:
+        raise ValueError("Empty train/test split. Check date_day values and split logic.")
+
 
     pipeline = Pipeline(
         steps=[
@@ -93,8 +101,8 @@ def main() -> None:
 
     # Useful metrics
     metrics = {
-        "rows_train": int(len(train)),
-        "rows_test": int(len(test)),
+        "rows_train": int(len(X_train)),
+        "rows_test": int(len(X_test)),
         "churn_rate_train": float(y_train.mean()),
         "churn_rate_test": float(y_test.mean()),
         "roc_auc": float(roc_auc_score(y_test, probs)),
@@ -108,7 +116,7 @@ def main() -> None:
     coefs = (
         pd.Series(
             pipeline.named_steps["model"].coef_[0],
-            index=feature_cols,
+            index=FEATURE_COLS,
             name="coef",
         )
         .sort_values(ascending=False)
