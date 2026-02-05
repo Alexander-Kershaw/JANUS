@@ -27,6 +27,7 @@ dbt/**/logs/
 dbt/**/partial_parse.msgpack
 dbt/**/manifest.json
 dbt/**/run_results.json
+
 dbt/**/graph.gpickle
 dbt/**/graph_summary.json
 dbt/**/semantic_manifest.json
@@ -37,4 +38,12 @@ reports/
 
 # Notebooks
 .ipynb_checkpoints/
+
+**/.ipynb_checkpoints/
+
+# Local outputs
+notebooks/**/.cache/
+notebooks/**/*.html
+notebooks/**/*.png
+notebooks/**/*.pdf
 
