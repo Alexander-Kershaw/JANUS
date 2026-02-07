@@ -47,6 +47,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from janus.db import make_engine
 
+MODEL_VERSION = "baseline_v1"
 
 REPORTS_DIR = Path("reports/model_cards")
 REPORTS_DIR.mkdir(parents=True, exist_ok=True)
@@ -341,6 +342,27 @@ def main() -> None:
     print("\nBaseline churn model trained (final fit on eligible days)")
     print("\nTop coefficients:")
     print(coefs.head(25).to_string(index=False))
+
+
+    # Model monitoring (persist fold metrics)
+    folds_path = REPORTS_DIR / "churn_baseline_v1_temporal_cv_folds.csv"
+    folds_df.to_csv(folds_path, index=False)
+
+    summary = {
+        "n_folds_total": int(len(folds_df)),
+        "n_folds_skipped": int(folds_df["skipped"].sum()) if "skipped" in folds_df.columns else 0,
+        "pr_auc_mean": float(folds_df.loc[~folds_df["skipped"], "pr_auc"].mean()),
+        "pr_auc_std": float(folds_df.loc[~folds_df["skipped"], "pr_auc"].std(ddof=0)),
+        "roc_auc_mean": float(folds_df.loc[~folds_df["skipped"], "roc_auc"].mean()),
+        "roc_auc_std": float(folds_df.loc[~folds_df["skipped"], "roc_auc"].std(ddof=0)),
+    }
+
+    with open(REPORTS_DIR / "churn_baseline_v1_temporal_cv_summary.json", "w") as f:
+        json.dump(summary, f, indent=2)
+
+    print(f"\nWrote CV folds -> {folds_path}")
+    print("Wrote CV summary -> reports/model_cards/churn_baseline_v1_temporal_cv_summary.json")
+
 
 
 if __name__ == "__main__":
