@@ -140,12 +140,12 @@ It demonstrates production-style data engineering, analyst-grade reporting, and 
 
 ```mermaid
 flowchart LR
-  A[Raw Generator<br/>JSONL events + CSV billing<br/>90 days + drift + late arrivals] --> B[Bronze Postgres<br/>append-only + metadata<br/>row_hash idempotency]
-  B --> C[Silver Postgres<br/>clean types + derived fields<br/>late flags + quarantine-ready]
-  C --> D[dbt staging + marts<br/>facts + gold features]
-  D --> E[Churn baseline model<br/>Temporal CV + model card outputs]
-  E --> F[Monitoring plots<br/>freshness + churn rate + late rate]
-  D --> G[Streamlit dashboard<br/>pipeline health + product analytics<br/>(demo)]
+  A["Raw Generator\nJSONL events + CSV billing\n90 days + drift + late arrivals"] --> B["Bronze Postgres\nappend-only + metadata\nrow_hash idempotency"]
+  B --> C["Silver Postgres\nclean types + derived fields\nlate flags + quarantine-ready"]
+  C --> D["dbt staging + marts\nfacts + gold features"]
+  D --> E["Churn baseline model\nTemporal CV + model card outputs"]
+  E --> F["Monitoring plots\nfreshness + churn rate + late rate"]
+  D --> G["Streamlit dashboard\npipeline health + product analytics\ndemo"]
 ```
 
 ---
