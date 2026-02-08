@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS bronze.bronze_events (
     source_file     TEXT NOT NULL,
     ingestion_ts    TIMESTAMPTZ NOT NULL,
     row_hash        TEXT NOT NULL
+
 );
 
 CREATE TABLE IF NOT EXISTS bronze.bronze_billing (
@@ -31,6 +32,7 @@ CREATE TABLE IF NOT EXISTS bronze.bronze_billing (
     source_file     TEXT NOT NULL,
     ingestion_ts    TIMESTAMPTZ NOT NULL,
     row_hash        TEXT NOT NULL
+
 );
 """
 

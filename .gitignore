@@ -47,3 +47,8 @@ notebooks/**/*.html
 notebooks/**/*.png
 notebooks/**/*.pdf
 
+# Metabase
+.metabase/
+metabase.db
+metabase.h2.db
+metabase.mv.db
